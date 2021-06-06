@@ -36,7 +36,7 @@
                 <td>Content2</td>
                 <td>Jiro</td>
                 <td>
-                    <router-link v-bind:to="{name: 'task.show', params: {taskId: 1}}">
+                    <router-link v-bind:to="{name: 'task.show', params: {taskId: 2}}">
                         <button class="btn btn-primary">Show</button>
                     </router-link>
                 </td>
@@ -53,7 +53,7 @@
                 <td>Content3</td>
                 <td>Saburo</td>
                 <td>
-                    <router-link v-bind:to="{name: 'task.show', params: {taskId: 1}}">
+                    <router-link v-bind:to="{name: 'task.show', params: {taskId: 3}}">
                         <button class="btn btn-primary">Show</button>
                     </router-link>
                 </td>
