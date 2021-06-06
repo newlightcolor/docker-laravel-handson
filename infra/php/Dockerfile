@@ -13,6 +13,7 @@ RUN apt-get update && \
   docker-php-ext-install intl pdo_mysql zip bcmath
 
 RUN cd laravel \
+    cp .env.example .env \
     composer install \
     php artisan key:generate 
 
