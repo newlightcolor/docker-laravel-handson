@@ -9,6 +9,7 @@ import HeaderComponent from "./components/HeaderComponent";
 import TaskListComponent from "./components/TaskListComponent";
 import TaskCreateComponent from "./components/TaskCreateComponent";
 import TaskDetailComponent from "./components/TaskDetailComponent";
+import TaskEditComponent from "./components/TaskEditComponent";
 
 require('./bootstrap');
 
@@ -33,6 +34,12 @@ const router = new VueRouter({
             path: '/tasks/:taskId',
             name: 'task.show',
             component: TaskDetailComponent,
+            props: true
+        },
+        {
+            path: '/tasks/:taskId/edit',
+            name: 'task.edit',
+            component: TaskEditComponent,
             props: true
         },
     ]
