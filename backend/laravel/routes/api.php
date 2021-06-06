@@ -22,3 +22,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('/tasks', 'App\Http\Controllers\TaskController@index');
 Route::get('/tasks', 'App\Http\Controllers\TaskController@store');
 Route::get('/tasks/{task}', 'App\Http\Controllers\TaskController@show');
+Route::put('/tasks/{task}', 'App\Http\Controllers\TaskController@update');
