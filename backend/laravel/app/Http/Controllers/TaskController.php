@@ -10,4 +10,8 @@ class TaskController extends Controller
     public function index(){
         return Task::all();
     }
+
+    public function show(Task $task){
+        return $task;
+    }
 }
