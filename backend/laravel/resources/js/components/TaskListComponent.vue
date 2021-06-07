@@ -16,7 +16,7 @@
             <tr v-for="(task, index) in tasks" :key="index">
                 <th scope="row">{{ task.id }}</th>
                 <td>{{ task.title }}</td>
-                <td>{{ task.content }}</td>
+                <td style="word-break: break-all">{{ task.content }}</td>
                 <td>{{ task.person_in_charge }}</td>
                 <td>
                     <router-link v-bind:to="{name: 'task.show', params: {taskId: task.id }}">
