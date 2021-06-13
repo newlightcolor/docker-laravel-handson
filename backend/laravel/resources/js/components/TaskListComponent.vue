@@ -1,5 +1,7 @@
 <template>
     <div class="container">
+        <postTaskForm style="margin-bottom: 15px" v-on:catchTask="catchTask"></postTaskForm>
+
         <table class="table table-hover">
             <thead class="thead-light">
             <tr>
@@ -29,7 +31,7 @@
                     </router-link>
                 </td>
                 <td>
-                    <button class="btn btn-danger">Delete</button>
+                    <button class="btn btn-danger" v-on:click="deleteTask(task.id, index)">Delete</button>
                 </td>
             </tr>
             </tbody>
@@ -38,6 +40,8 @@
 </template>
 
 <script>
+    import postTaskForm from './TaskCreateComponent.vue'
+
     export default {
         data: function () {
             return {
@@ -50,10 +54,20 @@
                     .then((res) => {
                         this.tasks = res.data;
                     });
+            },
+            deleteTask(id, index) {
+                this.tasks.splice(index, 1)
+                axios.delete('/api/tasks/' + id);
+            },
+            catchTask(task) {
+                this.tasks.push(task)
             }
         },
         mounted() {
             this.getTasks();
+        },
+        components: {
+            postTaskForm
         }
     }
 </script>
