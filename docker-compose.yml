@@ -5,7 +5,16 @@ services:
     volumes:
       - ./backend:/work
 
-  # 追記
+  app_front:
+    build: ./infra/node
+    ports:
+      - 8888:8888
+      - 8000:8000
+    volumes:
+      - ./frontend:/work
+    stdin_open: true
+    tty: true
+
   web:
     image: nginx:1.20-alpine
     ports:
