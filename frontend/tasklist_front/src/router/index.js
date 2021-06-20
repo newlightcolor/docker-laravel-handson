@@ -11,6 +11,11 @@ export default new Router({
     mode: 'history',
     routes: [
         {
+            path: '/',
+            name: 'task.list',
+            component: TaskListComponent
+        },
+        {
             path: '/tasks',
             name: 'task.list',
             component: TaskListComponent
@@ -19,12 +24,6 @@ export default new Router({
             path: '/tasks/create',
             name: 'task.create',
             component: TaskCreateComponent
-        },
-        {
-            path: '/tasks/:taskId',
-            name: 'task.show',
-            component: TaskDetailComponent,
-            props: true
         },
         {
             path: '/tasks/:taskId/edit',

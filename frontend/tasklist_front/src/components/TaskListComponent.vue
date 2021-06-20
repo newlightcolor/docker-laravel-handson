@@ -9,9 +9,7 @@
                 <th scope="col" class="tasklist_sort" @click="sortBy('title')">Title {{ sort.key === 'title'? (sort.asc? '▲': '▼' ): '' }}</th>
                 <th scope="col" class="tasklist_sort" @click="sortBy('content')">Content {{ sort.key === 'content'? (sort.asc? '▲': '▼' ): '' }}</th>
                 <th scope="col" class="tasklist_sort" @click="sortBy('person_in_charge')">Person In Charge {{ sort.key === 'person_in_charge'? (sort.asc? '▲': '▼' ): '' }}</th>
-                <th scope="col">Show</th>
-                <th scope="col">Edit</th>
-                <th scope="col">Delete</th>
+                <th scope="col" style="width: 120px"></th>
             </tr>
             </thead>
             <tbody>
@@ -32,16 +30,9 @@
                 </td>
                 <td>{{ task.person_in_charge }}</td>
                 <td>
-                    <router-link v-bind:to="{name: 'task.show', params: {taskId: task.id }}">
-                        <button class="btn btn-primary">Show</button>
-                    </router-link>
-                </td>
-                <td>
-                    <button class="btn btn-success" v-show="editTask.id !== task.id" v-on:click="editMode(index)">Edit</button>
-                    <button class="btn btn-success" v-show="editTask.id === task.id" v-on:click="editModeFinish()">End</button>
-                </td>
-                <td>
-                    <button class="btn btn-danger" v-on:click="deleteTask(task.id, index)">Delete</button>
+                    <button class="btn task-btn btn-success" v-show="editTask.id !== task.id" v-on:click="editMode(index)"><fa-icon icon="pen"/></button>
+                    <button class="btn task-btn btn-primary" v-show="editTask.id === task.id" v-on:click="editModeFinish()" style="padding: 5px;"><fa-icon icon="check"/></button>
+                    <button class="btn task-btn btn-danger" v-on:click="deleteTask(task.id, index)"><fa-icon icon="trash-alt"/></button>
                 </td>
             </tr>
             </tbody>
@@ -55,6 +46,12 @@
 }
 .tasklist_sort:hover {
     opacity: 0.8;
+}
+
+.task-btn {
+    height: 40px;
+    width: 40px;
+    margin: 2px;
 }
 
 .v-enter {
