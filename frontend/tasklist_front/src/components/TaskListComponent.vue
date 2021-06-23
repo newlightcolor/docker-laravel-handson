@@ -26,7 +26,8 @@
                     <textarea type="text" class="form-control-plaintext"
                             v-show="editTask.id === task.id"
                             v-model="editTask.content"
-                            style=""/>
+                            :ref="'taskContentTextArea' + task.id"
+                            :style="styles.editTaskContentStyle"/>
                 </td>
                 <td>{{ task.person_in_charge }}</td>
                 <td>
@@ -76,7 +77,7 @@
                 sort: {
                     key: "",
                     asc: true
-                }
+                },
             }
         },
         methods: {
@@ -96,6 +97,10 @@
             editMode(index){
                 this.editTask = this.tasks[index]
                 this.editTask.index = index
+
+                let ref = 'taskContentTextArea' + this.tasks[index].id
+                console.log(this.$refs[ref][0])
+                this.adjustHeight(this.$refs[ref][0])
             },
             editModeFinish(){
                 this.$axios.put('/api/tasks/'+ this.editTask.id, this.editTask)
@@ -120,6 +125,14 @@
                     this.sort.asc = true
                 }
             },
+            adjustHeight(ref) {
+                const resetHeight = new Promise(function(resolve) {
+                    resolve(ref.style.height = 'auto')
+                });
+                resetHeight.then(function(){
+                    ref.style.height = (ref.scrollHeight + 10) + 'px'
+                });
+            }
         },
         computed: {
             sort_tasks() {
@@ -139,7 +152,7 @@
                 }
 
                 return task_list;
-            },
+            }
         },
         mounted() {
             this.getTasks();
