@@ -26,8 +26,7 @@
                     <textarea type="text" class="form-control-plaintext"
                             v-show="editTask.id === task.id"
                             v-model="editTask.content"
-                            :ref="'taskContentTextArea' + task.id"
-                            :style="styles.editTaskContentStyle"/>
+                            :ref="'taskContentTextArea' + task.id"/>
                 </td>
                 <td>{{ task.person_in_charge }}</td>
                 <td>
@@ -38,6 +37,8 @@
             </tr>
             </tbody>
         </table>
+
+        <fixedAddButton/>
     </div>
 </template>
 
@@ -68,6 +69,7 @@
 
 <script>
     import postTaskForm from './TaskCreateComponent.vue'
+    import fixedAddButton from './fixedAddButton.vue'
 
     export default {
         data: function () {
@@ -158,7 +160,8 @@
             this.getTasks();
         },
         components: {
-            postTaskForm
+            postTaskForm,
+            fixedAddButton
         },
     }
 </script>
