@@ -1,12 +1,17 @@
 module.exports = {
+  devServer: {
+    port: 8888,
+  },
+
+  configureWebpack: {
     devServer: {
-      port: 8888,
-    },
-    configureWebpack: {
-      devServer: {
-        watchOptions: {
-          poll: true
-        }
+      watchOptions: {
+        poll: true
       }
     }
+  },
+
+  transpileDependencies: [
+    'vuetify'
+  ]
 }

@@ -9,6 +9,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import vuetify from './plugins/vuetify'
 
 axios.defaults.baseURL = 'http://localhost:8080';
 
@@ -22,5 +23,6 @@ Vue.component('fa-icon', FontAwesomeIcon)
 
 new Vue({
   router,
-  render: h => h(App),
+  vuetify,
+  render: h => h(App)
 }).$mount('#app')
