@@ -1,7 +1,30 @@
 <template>
-    <div class="container">
-        <postTaskForm style="margin-bottom: 15px" v-on:catchTask="catchTask"></postTaskForm>
-
+<section>
+    <v-card
+    class="ma-12"
+    elevation="2"
+    loading
+    v-show="taskListIsLoading"
+    >
+        <table class="table table-hover">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col" class="tasklist_sort" @click="sortBy('id')"># {{ sort.key === 'id'? (sort.asc? '▲': '▼' ): '' }}</th>
+                <th scope="col" class="tasklist_sort" @click="sortBy('title')">Title {{ sort.key === 'title'? (sort.asc? '▲': '▼' ): '' }}</th>
+                <th scope="col" class="tasklist_sort" @click="sortBy('content')">Content {{ sort.key === 'content'? (sort.asc? '▲': '▼' ): '' }}</th>
+                <th scope="col" class="tasklist_sort" @click="sortBy('person_in_charge')">Person In Charge {{ sort.key === 'person_in_charge'? (sort.asc? '▲': '▼' ): '' }}</th>
+                <th scope="col" style="width: 120px"></th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </v-card>
+    <v-card
+    class="ma-12"
+    elevation="2"
+    v-show="!taskListIsLoading"
+    >
         <table class="table table-hover">
             <thead class="thead-light">
             <tr>
@@ -29,17 +52,63 @@
                             :ref="'taskContentTextArea' + task.id"/>
                 </td>
                 <td>{{ task.person_in_charge }}</td>
-                <td>
-                    <button class="btn task-btn btn-success" v-show="editTask.id !== task.id" v-on:click="editMode(index)"><fa-icon icon="pen"/></button>
-                    <button class="btn task-btn btn-primary" v-show="editTask.id === task.id" v-on:click="editModeFinish()" style="padding: 5px;"><fa-icon icon="check"/></button>
-                    <button class="btn task-btn btn-danger" v-on:click="deleteTask(task.id, index)"><fa-icon icon="trash-alt"/></button>
+                <td style="display: flex;">
+                    <v-btn
+                    v-show="editTask.id !== task.id"
+                    v-on:click="editMode(index)"
+                    class="mx-1"
+                    color="blue"
+                    width="40"
+                    min-width="40"
+                    heiht="40"
+                    dark
+                    >
+                        <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
+
+                    <v-btn
+                    v-show="editTask.id === task.id"
+                    v-on:click="editModeFinish()"
+                    class="mx-1"
+                    width="40"
+                    min-width="40"
+                    heiht="40"
+                    style="padding: 5px;"
+                    >
+                        <v-icon>mdi-check</v-icon>
+                    </v-btn>
+
+                    <v-btn
+                    v-show="editTask.id === task.id"
+                    v-on:click="editTask = {}"
+                    class="mx-1"
+                    width="40"
+                    min-width="40"
+                    heiht="40"
+                    style="padding: 5px;"
+                    >
+                        <v-icon>mdi-cancel</v-icon>
+                    </v-btn>
+
+                    <v-btn
+                    v-on:click="deleteTask(task.id, index)"
+                    class="mx-1"
+                    width="40"
+                    min-width="40"
+                    heiht="40"
+                    color="red"
+                    dark
+                    >
+                        <v-icon>mdi-delete</v-icon>
+                    </v-btn>
                 </td>
             </tr>
             </tbody>
         </table>
 
         <fixedAddButton/>
-    </div>
+    </v-card>
+</section>
 </template>
 
 <style scoped>
@@ -48,12 +117,6 @@
 }
 .tasklist_sort:hover {
     opacity: 0.8;
-}
-
-.task-btn {
-    height: 40px;
-    width: 40px;
-    margin: 2px;
 }
 
 .v-enter {
@@ -68,7 +131,6 @@
 </style>
 
 <script>
-    import postTaskForm from './TaskCreateComponent.vue'
     import fixedAddButton from './fixedAddButton.vue'
 
     export default {
@@ -80,14 +142,18 @@
                     key: "",
                     asc: true
                 },
+                taskListIsLoading: true,
             }
         },
         methods: {
             getTasks() {
-                this.$axios.get('/api/tasks')
-                    .then((res) => {
-                        this.tasks = res.data;
-                    });
+                return new Promise((resolve) => {
+                    this.$axios.get('/api/tasks')
+                        .then((res) => {
+                            this.tasks = res.data;
+                            resolve()
+                        });
+                })
             },
             deleteTask(id, index) {
                 this.tasks.splice(index, 1)
@@ -157,10 +223,12 @@
             }
         },
         mounted() {
-            this.getTasks();
+            this.getTasks()
+                .then(()=> {
+                    this.taskListIsLoading = false;
+                });
         },
         components: {
-            postTaskForm,
             fixedAddButton
         },
     }

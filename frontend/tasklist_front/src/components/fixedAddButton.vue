@@ -1,23 +1,27 @@
 <template>
-<section class="fixed-add-button">
+<section class="fixed-add-button-section">
     <router-link v-bind:to="{ name: 'task.create'}">
-        <a class="btn btn-primary"><fa-icon icon="plus"/></a>
+        <v-btn
+        dark
+        fab
+        rounded
+        color="blue"
+        elevation="4"
+        class="fixed-add-button"
+        >
+            <v-icon>
+                mdi-playlist-plus
+            </v-icon>
+        </v-btn>
     </router-link>
 </section>
 </template>
 
 <style scoped>
-    .fixed-add-button {
+    .fixed-add-button-section {
         position: fixed;
         right: 60px;
         bottom: 60px;
-    }
-
-    .fixed-add-button .btn{
-        border-radius: 50px;
-        font-size: 25px;
-        height: 50px;
-        width: 50px;
     }
 </style>
 
