@@ -1,122 +1,107 @@
 <template>
 <section>
-    <v-card
-    class="ma-12"
-    elevation="2"
-    loading
-    v-show="taskListIsLoading"
+    <v-data-table
+        loading
+        loading-text="タスクをロード中..."
+        hide-default-footer
+        :headers="headers"
+        :items="[{},{},{},{},{}]"
+        class="elevation-2"
+        v-show="taskListIsLoading"
     >
-        <table class="table table-hover">
-            <thead class="thead-light">
-            <tr>
-                <th scope="col" class="tasklist_sort" @click="sortBy('id')"># {{ sort.key === 'id'? (sort.asc? '▲': '▼' ): '' }}</th>
-                <th scope="col" class="tasklist_sort" @click="sortBy('title')">Title {{ sort.key === 'title'? (sort.asc? '▲': '▼' ): '' }}</th>
-                <th scope="col" class="tasklist_sort" @click="sortBy('content')">Content {{ sort.key === 'content'? (sort.asc? '▲': '▼' ): '' }}</th>
-                <th scope="col" class="tasklist_sort" @click="sortBy('person_in_charge')">Person In Charge {{ sort.key === 'person_in_charge'? (sort.asc? '▲': '▼' ): '' }}</th>
-                <th scope="col" style="width: 120px"></th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </v-card>
-    <v-card
-    class="ma-12"
-    elevation="2"
-    v-show="!taskListIsLoading"
+    </v-data-table>
+    <v-data-table
+        :headers="headers"
+        :items="tasks"
+        :items-per-page="5"
+        :footer-props="{
+           'items-per-page-text':'表示数',
+           'items-per-page-options': ['10', '30', '50', '100']
+        }"
+        class="elevation-2"
+        v-show="!taskListIsLoading"
     >
-        <table class="table table-hover">
-            <thead class="thead-light">
-            <tr>
-                <th scope="col" class="tasklist_sort" @click="sortBy('id')"># {{ sort.key === 'id'? (sort.asc? '▲': '▼' ): '' }}</th>
-                <th scope="col" class="tasklist_sort" @click="sortBy('title')">Title {{ sort.key === 'title'? (sort.asc? '▲': '▼' ): '' }}</th>
-                <th scope="col" class="tasklist_sort" @click="sortBy('content')">Content {{ sort.key === 'content'? (sort.asc? '▲': '▼' ): '' }}</th>
-                <th scope="col" class="tasklist_sort" @click="sortBy('person_in_charge')">Person In Charge {{ sort.key === 'person_in_charge'? (sort.asc? '▲': '▼' ): '' }}</th>
-                <th scope="col" style="width: 120px"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="(task, index) in sort_tasks" :key="task.id">
-                <td scope="row">{{ task.id }}</td>
-                <td>
-                    <div v-show="editTask.id !== task.id">{{ task.title }}</div>
-                    <input type="text" class="form-control-plaintext"
-                            v-show="editTask.id === task.id"
-                            v-model="editTask.title">
-                </td>
-                <td style="word-break: break-all" v-on:fucus="editMode(task.id)">
-                    <div v-show="editTask.id !== task.id">{{ task.content }}</div>
-                    <textarea type="text" class="form-control-plaintext"
-                            v-show="editTask.id === task.id"
-                            v-model="editTask.content"
-                            :ref="'taskContentTextArea' + task.id"/>
-                </td>
-                <td>{{ task.person_in_charge }}</td>
-                <td style="display: flex;">
-                    <v-btn
-                    v-show="editTask.id !== task.id"
-                    v-on:click="editMode(index)"
-                    class="mx-1"
-                    color="blue"
-                    width="40"
-                    min-width="40"
-                    heiht="40"
-                    dark
-                    >
-                        <v-icon>mdi-pencil</v-icon>
-                    </v-btn>
+        <template v-slot:item.actions="{ item }">
+            <v-icon
+                @click="editTask(item)"
+            >mdi-pencil</v-icon>
+            <v-icon
+                @click="deleteTask(item)"
+            >mdi-delete</v-icon>
+        </template>
+        <template v-slot:item.content="{ item }">
+            <div>
+                {{item.content}}
+            </div>
+        </template>
+    </v-data-table>
 
-                    <v-btn
-                    v-show="editTask.id === task.id"
-                    v-on:click="editModeFinish()"
-                    class="mx-1"
-                    width="40"
-                    min-width="40"
-                    heiht="40"
-                    style="padding: 5px;"
-                    >
-                        <v-icon>mdi-check</v-icon>
-                    </v-btn>
+    <v-dialog v-model="dialog" max-width="500">
+        <v-card>
+            <v-card-title>
+                <span class="text-h5">Edit Task</span>
+            </v-card-title>
+            <v-card-text>
+                <v-container>
+                    <v-row>
+                        <v-col
+                        cols="6"
+                        >
+                            <v-text-field
+                            v-model="editTaskItem.title"
+                            label="Title"
+                            />
+                        </v-col>
+                        <v-col
+                        cols="6"
+                        >
+                            <v-text-field
+                            v-model="editTaskItem.person_in_charge"
+                            label="Person In Charge"
+                            />
+                        </v-col>
+                        <v-col
+                        cols="12"
+                        >
+                            <v-textarea
+                            v-model="editTaskItem.content"
+                            label="Content"
+                            />
+                        </v-col>
+                    </v-row>
+                </v-container>
+            </v-card-text>
 
-                    <v-btn
-                    v-show="editTask.id === task.id"
-                    v-on:click="editTask = {}"
-                    class="mx-1"
-                    width="40"
-                    min-width="40"
-                    heiht="40"
-                    style="padding: 5px;"
-                    >
-                        <v-icon>mdi-cancel</v-icon>
-                    </v-btn>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="blue darken-1"
+                    text
+                    @click="editCancelTask"
+                >
+                    Cancel
+                </v-btn>
+                <v-btn
+                    color="blue darken-1"
+                    text
+                    @click="editFinishTask"
+                >
+                    Save
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 
-                    <v-btn
-                    v-on:click="deleteTask(task.id, index)"
-                    class="mx-1"
-                    width="40"
-                    min-width="40"
-                    heiht="40"
-                    color="red"
-                    dark
-                    >
-                        <v-icon>mdi-delete</v-icon>
-                    </v-btn>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-        <fixedAddButton/>
-    </v-card>
+    <fixedAddButton/>
 </section>
 </template>
 
 <style scoped>
-.tasklist_sort {
-    cursor: pointer;
-}
-.tasklist_sort:hover {
-    opacity: 0.8;
+.v-data-table td div{
+    max-width: 500px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .v-enter {
@@ -136,15 +121,25 @@
     export default {
         data: function () {
             return {
+                headers: [
+                    {text: '#', value: 'id', width: '60'},
+                    {text: 'title', value: 'title', width: '80'},
+                    {text: 'content', value: 'content'},
+                    {text: 'person', value: 'person_in_charge'},
+                    {text: '', value: 'actions', width: '80'}
+                ],
                 tasks: [],
-                editTask: {},
+                editTaskItem: {},
+                editTaskItemIndex: -1,
                 sort: {
                     key: "",
                     asc: true
                 },
+                dialog: false,
                 taskListIsLoading: true,
             }
         },
+
         methods: {
             getTasks() {
                 return new Promise((resolve) => {
@@ -155,29 +150,29 @@
                         });
                 })
             },
-            deleteTask(id, index) {
-                this.tasks.splice(index, 1)
-                this.$axios.delete('/api/tasks/' + id);
+            deleteTask(task) {
+                alert(task.id)
             },
             catchTask(task) {
                 this.tasks.push(task)
             },
-            editMode(index){
-                this.editTask = this.tasks[index]
-                this.editTask.index = index
-
-                let ref = 'taskContentTextArea' + this.tasks[index].id
-                console.log(this.$refs[ref][0])
-                this.adjustHeight(this.$refs[ref][0])
+            editTask(task){
+                this.editTaskItemIndex = this.tasks.indexOf(task)
+                this.editTaskItem = task
+                this.dialog = true
             },
-            editModeFinish(){
-                this.$axios.put('/api/tasks/'+ this.editTask.id, this.editTask)
+            editFinishTask(){
+                this.$axios.put('/api/tasks/'+ this.editTaskItem.id, this.editTaskItem)
                     .then(() => {
                         alert('koushin')
                     }
                 )
-                this.tasks[this.editTask.index] = this.editTask
-                this.editTask = {}
+                this.tasks[this.editTaskItem.index] = this.editTaskItem
+                this.editTaskItem = {}
+            },
+            editCancelTask(){
+                this.editTaskItem = {}
+                this.dialog = false
             },
             sortBy(sort_key) {
                 if(this.sort.key === sort_key){
@@ -202,6 +197,7 @@
                 });
             }
         },
+
         computed: {
             sort_tasks() {
                 let task_list = this.tasks.slice();
@@ -222,12 +218,20 @@
                 return task_list;
             }
         },
+
+        watch: {
+            dialog (val) {
+                val || this.editCancelTask()
+            }
+        },
+
         mounted() {
             this.getTasks()
                 .then(()=> {
                     this.taskListIsLoading = false;
                 });
         },
+
         components: {
             fixedAddButton
         },
