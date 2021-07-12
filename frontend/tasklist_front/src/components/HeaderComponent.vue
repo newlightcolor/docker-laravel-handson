@@ -2,12 +2,10 @@
     <div>
         <v-app-bar
         app
-        color="blue"
+        color="indigo"
         dark
         >
-            <nav class="navbar navbar-dark">
-                <span class="navbar-brand mb-0 h1">Vue Laravel SPA</span>
-            </nav>
+            <v-icon @click="toggleDrawer" large>mdi-menu</v-icon>
 
             <v-spacer></v-spacer>
 
@@ -31,7 +29,13 @@
 </template>
 
 <script>
-    export default {}
+    export default {
+        methods: {
+            toggleDrawer() {
+                this.$emit('toggleDrawer')
+            }
+        }
+    }
 </script>
 
 <style scoped>
