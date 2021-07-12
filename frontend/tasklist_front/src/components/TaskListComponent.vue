@@ -11,7 +11,7 @@
     <v-data-table
         :headers="headers"
         :items="tasks"
-        :items-per-page="5"
+        :item-key="id"
         :footer-props="{
            'items-per-page-text':'表示数',
            'items-per-page-options': ['10', '30', '50', '100']
@@ -42,25 +42,19 @@
             <v-card-text>
                 <v-container>
                     <v-row>
-                        <v-col
-                        cols="6"
-                        >
+                        <v-col cols="6">
                             <v-text-field
                             v-model="editTaskItem.title"
                             label="Title"
                             />
                         </v-col>
-                        <v-col
-                        cols="6"
-                        >
+                        <v-col cols="6">
                             <v-text-field
                             v-model="editTaskItem.person_in_charge"
                             label="Person In Charge"
                             />
                         </v-col>
-                        <v-col
-                        cols="12"
-                        >
+                        <v-col cols="12">
                             <v-textarea
                             v-model="editTaskItem.content"
                             label="Content"
@@ -129,10 +123,6 @@
                 tasks: [],
                 editTaskItem: {},
                 editTaskItemIndex: -1,
-                sort: {
-                    key: "",
-                    asc: true
-                },
                 dialog: false,
                 taskListIsLoading: true,
             }
@@ -151,13 +141,15 @@
             deleteTask(task) {
                 alert(task.id)
             },
-            catchTask(task) {
-                this.tasks.push(task)
-            },
             editTask(task){
                 this.editTaskItemIndex = this.tasks.indexOf(task)
-                this.editTaskItem = task
+                this.editTaskItem = Object.assign({}, task)
                 this.dialog = true
+            },
+            editCancelTask(){
+                this.editTaskItem = {}
+                this.editTaskItemIndex = -1
+                this.dialog = false
             },
             editFinishTask(){
                 this.$axios.put('/api/tasks/'+ this.editTaskItem.id, this.editTaskItem)
@@ -165,56 +157,12 @@
                         alert('koushin')
                     }
                 )
-                this.tasks[this.editTaskItem.index] = this.editTaskItem
+                Object.assign(this.tasks[this.editTaskItemIndex], this.editTaskItem)
+                this.tasks[this.editTaskItemIndex] = this.editTaskItem
                 this.editTaskItem = {}
-            },
-            editCancelTask(){
-                this.editTaskItem = {}
+                this.editTaskItemIndex = -1
                 this.dialog = false
             },
-            sortBy(sort_key) {
-                if(this.sort.key === sort_key){
-                    if(this.sort.asc === false){
-                        this.sort.key = ""
-                        this.sort.asc = true
-                    }else{
-                        this.sort.key = sort_key
-                        this.sort.asc = false
-                    }
-                }else{
-                    this.sort.key = sort_key
-                    this.sort.asc = true
-                }
-            },
-            adjustHeight(ref) {
-                const resetHeight = new Promise(function(resolve) {
-                    resolve(ref.style.height = 'auto')
-                });
-                resetHeight.then(function(){
-                    ref.style.height = (ref.scrollHeight + 10) + 'px'
-                });
-            }
-        },
-
-        computed: {
-            sort_tasks() {
-                let task_list = this.tasks.slice();
-
-                if(this.sort.key != ""){
-                    task_list.sort((a,b) => {
-                        if(this.sort.asc === true){
-                            if(a[this.sort.key] < b[this.sort.key]) return -1;
-                            if(a[this.sort.key] > b[this.sort.key]) return 1;
-                        }else{
-                            if(a[this.sort.key] > b[this.sort.key]) return -1;
-                            if(a[this.sort.key] < b[this.sort.key]) return 1;
-                        }
-                        return 0;
-                    });
-                }
-
-                return task_list;
-            }
         },
 
         watch: {
