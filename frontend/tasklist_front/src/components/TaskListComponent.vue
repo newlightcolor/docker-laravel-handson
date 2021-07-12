@@ -4,8 +4,6 @@
         loading
         loading-text="タスクをロード中..."
         hide-default-footer
-        :headers="headers"
-        :items="[{},{},{},{},{}]"
         class="elevation-2"
         v-show="taskListIsLoading"
     >
@@ -39,7 +37,7 @@
     <v-dialog v-model="dialog" max-width="500">
         <v-card>
             <v-card-title>
-                <span class="text-h5">Edit Task</span>
+                <span class="text-h5">タスク編集</span>
             </v-card-title>
             <v-card-text>
                 <v-container>
@@ -79,14 +77,14 @@
                     text
                     @click="editCancelTask"
                 >
-                    Cancel
+                    キャンセル
                 </v-btn>
                 <v-btn
                     color="blue darken-1"
                     text
                     @click="editFinishTask"
                 >
-                    Save
+                    保存
                 </v-btn>
             </v-card-actions>
         </v-card>
