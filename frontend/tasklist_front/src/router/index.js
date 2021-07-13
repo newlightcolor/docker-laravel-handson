@@ -15,7 +15,7 @@ export default new Router({
             component: TaskListComponent
         },
         {
-            path: '/tasks',
+            path: '/tasks/list',
             name: 'task.list',
             component: TaskListComponent
         },

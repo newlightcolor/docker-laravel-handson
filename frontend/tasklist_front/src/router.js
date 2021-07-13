@@ -4,6 +4,7 @@ import TaskListComponent from "./components/TaskListComponent";
 import TaskCreateComponent from "./components/TaskCreateComponent";
 import TaskDetailComponent from "./components/TaskDetailComponent";
 import TaskEditComponent from "./components/TaskEditComponent";
+import UserRegisterComponent from "./components/UserRegisterComponent.vue";
 
 Vue.use(Router)
 
@@ -11,7 +12,12 @@ export default new Router({
     mode: 'history',
     routes: [
         {
-            path: '/tasks',
+            path: '/',
+            name: 'task.list',
+            component: TaskListComponent
+        },
+        {
+            path: '/tasks/list',
             name: 'task.list',
             component: TaskListComponent
         },
@@ -31,6 +37,10 @@ export default new Router({
             name: 'task.edit',
             component: TaskEditComponent,
             props: true
+        },
+        {
+            path: '/user/register',
+            component: UserRegisterComponent,
         },
     ]
 })

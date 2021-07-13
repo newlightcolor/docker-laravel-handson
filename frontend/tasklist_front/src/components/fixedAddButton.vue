@@ -7,7 +7,7 @@
         fixed
         bottom
         right
-        color="indigo accent-4"
+        color="indigo"
         elevation="4"
         >
             <v-icon>mdi-pencil-plus</v-icon>

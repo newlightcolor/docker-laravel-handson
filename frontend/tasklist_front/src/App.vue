@@ -1,7 +1,6 @@
 <template>
   <v-app>
-    <HeaderComponent v-on:toggleDrawer="toggleDrawer"/>
-    <SideDrawerComponent v-bind:showDrawer="showDrawer"/>
+    <MenuBarComponent/>
 
     <v-main>
       <v-container>
@@ -12,15 +11,13 @@
 </template>
 
 <script>
-import HeaderComponent from "./components/HeaderComponent.vue";
-import SideDrawerComponent from "./components/SideDrawerComponent.vue";
+import MenuBarComponent from "./components/MenuBarComponent.vue";
 
 export default {
   name: 'App',
 
   components: {
-    HeaderComponent,
-    SideDrawerComponent,
+    MenuBarComponent,
   },
 
   data: () => ({
