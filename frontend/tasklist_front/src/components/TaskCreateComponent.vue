@@ -46,7 +46,7 @@
         },
         methods: {
             submit() {
-                this.$axios.post('/api/tasks', this.task)
+                this.$axios.post('/tasks', this.task)
                     .then((res) => {
                         this.task.content = null
                         this.$emit('catchTask', res.data);

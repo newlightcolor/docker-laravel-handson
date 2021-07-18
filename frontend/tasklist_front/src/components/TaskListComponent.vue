@@ -131,7 +131,7 @@
         methods: {
             getTasks() {
                 return new Promise((resolve) => {
-                    this.$axios.get('/api/tasks')
+                    this.$axios.get('/tasks')
                         .then((res) => {
                             this.tasks = res.data;
                             resolve()
@@ -152,7 +152,7 @@
                 this.dialog = false
             },
             editFinishTask(){
-                this.$axios.put('/api/tasks/'+ this.editTaskItem.id, this.editTaskItem)
+                this.$axios.put('/tasks/'+ this.editTaskItem.id, this.editTaskItem)
                     .then(() => {
                         alert('koushin')
                     }
