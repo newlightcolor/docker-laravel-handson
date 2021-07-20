@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\Cors;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +25,10 @@ Route::post('/tasks', 'App\Http\Controllers\TaskController@store');
 Route::get('/tasks/{task}', 'App\Http\Controllers\TaskController@show');
 Route::put('/tasks/{task}', 'App\Http\Controllers\TaskController@update');
 Route::delete('/tasks/{task}', 'App\Http\Controllers\TaskController@delete');
+
+Route::middleware([Cors::class])->group( function() {
+    Route::options('/user', function() {
+        return response()->json();
+    });
+    Route::post('/user', 'App\Http\Controllers\UserController@store');
+});
