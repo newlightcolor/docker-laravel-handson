@@ -5,6 +5,7 @@ import TaskCreateComponent from "./components/TaskCreateComponent";
 import TaskDetailComponent from "./components/TaskDetailComponent";
 import TaskEditComponent from "./components/TaskEditComponent";
 import UserRegisterComponent from "./components/UserRegisterComponent.vue";
+import LoginPageComponent from "./components/LoginPageComponent.vue";
 
 Vue.use(Router)
 
@@ -41,6 +42,10 @@ export default new Router({
         {
             path: '/user/register',
             component: UserRegisterComponent,
+        },
+        {
+            path: '/login',
+            component: LoginPageComponent,
         },
     ]
 })

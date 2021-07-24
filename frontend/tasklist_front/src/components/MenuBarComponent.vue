@@ -44,7 +44,7 @@
                                 <v-list-item-title>登録</v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
-                        <v-list-item to="/user/login">
+                        <v-list-item to="/login">
                             <v-list-item-content>
                                 <v-list-item-title>ログイン</v-list-item-title>
                             </v-list-item-content>
