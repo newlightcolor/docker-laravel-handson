@@ -19,6 +19,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::prefix('auth')->group(function () {
+    Route::post('/login', 'App\Http\Controllers\AuthController@login');
+    Route::post('/logout', 'App\Http\Controllers\AuthController@logout');
+});
+
 
 Route::get('/tasks', 'App\Http\Controllers\TaskController@index');
 Route::post('/tasks', 'App\Http\Controllers\TaskController@store');
