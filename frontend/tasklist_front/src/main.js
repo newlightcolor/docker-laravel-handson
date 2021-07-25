@@ -14,8 +14,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import vuetify from './plugins/vuetify'
 
-axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
-
 library.add(fas)
 
 Vue.config.productionTip = false
