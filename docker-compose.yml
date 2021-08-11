@@ -1,0 +1,50 @@
+version: "3.9"
+services:
+  app:
+    build: ./infra/php
+    volumes:
+      - ./backend:/work
+
+  app_front:
+    build: ./infra/node
+    ports:
+      - 8888:8888
+      - 8000:8000
+    volumes:
+      - ./frontend:/work
+    stdin_open: true
+    tty: true
+
+  web:
+    image: nginx:1.20-alpine
+    ports:
+      - 8080:80
+    volumes:
+      - ./backend:/work
+      - ./infra/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    working_dir: /work
+
+  db:
+    build: ./infra/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+      - db-store:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+      - PMA_USER=phper
+      - PMA_PASSWORD=secret
+    links:
+      - db:db
+    ports:
+      - 8081:80
+
+volumes:
+  db-store:
